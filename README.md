@@ -9,13 +9,13 @@ Install:
 
 Add this to "require" in composer.json:
 
-		"makzumi/calendar": "dev-master"
+		"craighooghiem/calendar": "dev-master"
 
 After that run a composer update, then in app.php add:
 
 		'providers' => array(
 					...,
-					'Makzumi\Calendar\CalendarServiceProvider',
+					'craighooghiem\Calendar\CalendarServiceProvider',
 				),
 
 To use, create a new Calender instance and generate it, below you'll find several options to customize it as well:
