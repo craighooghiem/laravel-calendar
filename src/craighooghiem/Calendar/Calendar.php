@@ -36,6 +36,8 @@ class Calendar {
 	private $labelsClass = 'cal_labels';
 	private $eventWrap = array('<p>', '</p>');
 
+	private $eventLink = array('#');
+
 	private $today;
 
 	public function __construct() {
@@ -399,6 +401,9 @@ class Calendar {
 		$this->html .= $h;
 	}
 
+	/**
+	 * Process the events from array and return HTML to be output for current date
+	 */
 	private function buildEvents($date, $event = FALSE) {
 		if (!$this->events)
 			return "";
@@ -409,8 +414,41 @@ class Calendar {
 		if ($event) {
 			return $this->processEvent($event);
 		}
+		// Loop through the events and parse key as date
 		foreach ($events as $key=>$event) {
 			$edate = date('Y-m-d', strtotime($key));
+
+			// Do we have a multi-dimensional event with a link and description?
+			if(isset($event['link']))
+			{
+				if (is_array($event['desc'])) 
+				{
+					if ($date == $edate) 
+					{
+						$h .= $this->processEvent($event['desc']);
+					}
+					else 
+					{
+						if ($date == $key) 
+						{
+							$h .= $this->eventWrap[0];
+							$h .= $event['desc']. 'test';
+							$h .= $this->eventWrap[1];
+						}
+					}
+				}
+				else 
+				{
+					if ($date == $key) {
+						$h .= $this->eventWrap[0];
+						$h .= $event['desc,.']. 'test';
+						$h .= $this->eventWrap[1];
+					}
+				}
+
+			}
+
+			// Do we have more than one event description?
 			if (is_array($event)) {
 				if ($date == $edate) {
 					$h .= $this->processEvent($event);
@@ -426,11 +464,17 @@ class Calendar {
 		return $h;
 	}
 
+	/**
+	 * Process event descriptions where there is more than one in the array
+	 * @return string HTML
+	 */
 	private function processEvent($event) {
 		$h = "";
 		foreach ($event as $e) {
 			$h .= $this->eventWrap[0];
-			$h .= $e;
+			$h .= '<a href="'.$e['link'].'">';
+			$h .= $e['title'];
+			$h .= '</a>';
 			$h .= $this->eventWrap[1];
 		}
 		return $h;
