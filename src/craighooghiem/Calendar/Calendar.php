@@ -22,7 +22,7 @@ class Calendar {
 
 	//WRAPS AND CSS
 	private $tableClass = 'table table-calendar';
-	private $headClass = '';
+	private $headClass = 'table-heading';
 
 	private $prevIco = '<';
 	private $nextIco = '>';
@@ -101,6 +101,23 @@ class Calendar {
 				break;
 		}
 		return $this->html;
+	}
+
+	public function mobileGenerate() {
+		$string = $this->generate();
+
+		$string = str_ireplace('<table', '<div', $string);
+		$string = str_ireplace('<td', '<div', $string);
+		$string = str_ireplace('<tr', '<div', $string);
+		$string = str_ireplace('<thead', '<div', $string);
+		$string = str_ireplace('<th', '<div', $string);
+		$string = str_ireplace('</table', '</div', $string);
+		$string = str_ireplace('</td', '</div', $string);
+		$string = str_ireplace('</tr', '</div', $string);
+		$string = str_ireplace('</thead', '</div', $string);
+		$string = str_ireplace('</th', '</div', $string);
+
+		return $string;
 	}
 
 	public function setBasePath($path) {
